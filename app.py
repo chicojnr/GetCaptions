@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from youtube_transcript_api import YouTubeTranscriptApi
 import json
 
@@ -6,7 +7,7 @@ app = Flask(__name__)
 
 @app.get('/')
 def index():
-        srt = YouTubeTranscriptApi.get_transcript('7le4AGwtH94', languages=['pt'])
+        srt = YouTubeTranscriptApi.get_transcript(request.args.get('id'), languages=['pt'])
         #with open("subtitles.txt", "w") as f:
         caption_ret = []
         # iterating through each element of list srt
