@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from youtube_transcript_api import YouTubeTranscriptApi
 import gc
+import json
 
 app = Flask(__name__)
 
@@ -21,12 +22,15 @@ def cleanup(response):
 
 @app.route('/')
 def index():
-    srt = YouTubeTranscriptApi.get_transcript(request.args.get('id'), languages=['pt'])
-    caption_ret = []
-    for i in srt:
-        caption_ret.append(i)
+        try:
+                srt = YouTubeTranscriptApi.get_transcript(request.args.get('id'), languages=['pt'])
+                caption_ret = []
+                for i in srt:
+                        caption_ret.append(i)
 
-    return jsonify(caption_ret)
+                return jsonify(caption_ret)
+        except Exception as e:
+                return json.dumps({"error": str(e)}, ensure_ascii=False)
 
 if __name__ == '__main__':
     app.run()
